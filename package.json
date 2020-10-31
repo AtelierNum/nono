@@ -1,0 +1,26 @@
+{
+  "name": "nono",
+  "version": "0.0.1",
+  "description": "the discord bot of the Atelier Numerique of the Ecole De Design of Nantes",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "arduino",
+    "discord.js",
+    "discord"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "dotenv": "^8.2.0",
+    "johnny-five": "^1.0.0",
+    "winston": "^3.3.3",
+    "yargs": "^16.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
