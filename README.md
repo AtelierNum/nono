@@ -1,16 +1,35 @@
-# Comment créer une commande
+# Participer à nono
+Si vous souhaitez participer au développement de Nono, il faut d'abord le reproduire localement pour effectuer des tests avant d'envoyer une pull-request sur le repo.
 
-## commande simple
+1. Dupliquer ce repo sur votre machine avec ``git pull https://github.com/AtelierNum/nono.git master``
+2. Installer les dépendances : ``npm install``.
+3. Reproduire le ``.env`` avec votre token de bot que vous aurez crée.
+4. Lancer l'app avec ``node mains.js``.
+
+## Créer un bot Discord
+Il faut déclarer une application sur Discord pour pouvoir mettre en place un bot sur n'importe quel serveur. Cette application permettra de gérer les droits que vous lui donnerez et est identifiable avec le ``client_id`` ; le bot pourra être partagé à n'importe quel utilisateur Discord à partir de son token.
+Vous créez donc une nouvelle application [ici](https://discord.com/developers/applications). Nommez là, c'est mieux.
+
+Une fois cela fait, vous pouvez vous rendre dans l'onglet ``Bot`` où vous pourrez ajouter un nouveau bot et lui donner un petit nom ainsi qu'un magnifique avatar.
+Vous pouvez maintenant récupérer le token du bot, le copier dans le ``.env`` et run l'app pour activer votre bot.
+
+Il ne reste plus qu'à l'ajouter à votre serveur avec le lien suivant (en remplaçant le client_id): 
+``https://discord.com/oauth2/authorize?client_id=[le_client_id_de_votre_application_discord]&scope=bot``
+
+
+## Comment créer une commande
+
+### commande simple
 
 Pour créer une commande, créz un fichier `.js` dans le dossier `/commands` . Le nom de ce fichier sera le nom de votre commande. 
 Par exemple `/commands/repeat.js` sera la commande `repeat`.
 
-## sous-commande
+### sous-commande
 
 Pour créer une sous-commande, il faudra créer un dossier dans `/commands` pour votre famille de commandes, si elle n'existe pas déjà, puis mettre votre sous-commande dans ce dossier. 
 Par exemple `/command/arduino/led.js` sera la commande `arduino led`.
 
-## Anatomie d'une commande
+### Anatomie d'une commande
 
 Une commande s'écrit sous la forme d'un module exportant au moins 2 proprietées :
 
@@ -52,7 +71,7 @@ Pour des usages un peu plus avancés vous pouvez écrire une definition complèt
 
 - - `"string"` : permet de récupérer une chaîne de caractères en paramètre. Attention, les chaîne contenant des espaces doivent être encadré par des `"` lors de l'appel de la commande, sinon seulement le premier mot est pris en compte. Par example `commande --ma_phrase "ceci est correct"` vera `argv.ma_phrase` porter la  valeur `ceci est correct` alors que `commande --ma_phrase ceci n'est pas correct` vera `argv.ma_phrase` porter la valeur `ceci` .
 
-## Example complet :
+### Example complet :
 
 ```js
 // ./commands/repeat.js
