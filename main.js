@@ -5,7 +5,7 @@ const yargs = require("yargs");
 const fs = require("fs");
 const { join } = require("path");
 
-const prefix = "!";
+// const prefix = "!";
 
 if (process.env.HAS_ARDUINO.toLowerCase() === "true") {
   const arduino = require("./arduino")();
@@ -57,7 +57,7 @@ client.on("ready", () => {
       return;
     }
 
-    if(!msg.content.startsWith(prefix)) return;
+    // if(!msg.content.startsWith(prefix)) return;
 
     yargs.parse(msg.content, { msg: msg }, (err, argv, output) => {
       if (output) msg.channel.send("```" + output + "```");
