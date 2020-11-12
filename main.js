@@ -8,7 +8,7 @@ const { join } = require("path");
 // const prefix = "!";
 
 if (process.env.HAS_ARDUINO.toLowerCase() === "true") {
-  const arduino = require("./arduino")();
+  const arduino = require("./commarduino")();
   // //top level await ain't a thing yet
   // //even if it were it would be only at the top of a module
   while (!arduino) {}

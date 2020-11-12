@@ -1,5 +1,4 @@
-const five = require("johnny-five");
-const board = new five.Board();
+const arduino = require("./index");
 
 exports.command = "<state>";
 
@@ -11,26 +10,14 @@ exports.builder = {
   },
 };
 
-exports.handler = function (argv) {
-  switch (argv.state) {
-    case 'state':
-      let sentence = exports.builder.state.default ? "La led est allumée." : "La led est éteinte.";
-      argv.msg.channel.send(sentence);
-      break;
-    case 'on':
-      exports.builder.state.default = !exports.builder.state.default;
-      argv.msg.channel.send("Et ainsi la lumière éclaira le monde des hommes.");
-      return {
-        led: (on) => {
-          const led = new five.Led(13);
-          on ? led.on() : led.off();
-        },
-      };
-      break;
-    case 'off':
-      exports.builder.state.default = !exports.builder.state.default;
-      argv.msg.channel.send("Ainsi revinrent les longues nuits.");
-      break;
+exports.handler = async function (argv) {
+  if (argv.state == 'state'){
+    console.log(`Sur une échelle de 1 à 12, de 1 à 4 la led est éteinte. 
+    De 4 à 7 elle est allumée. C'est seulement de 8 à 9 qu'elle est psychologiquement en train de s'allumer. 
+    Mais de 9 à 11, elle est plutôt en train de s'éteindre ! Et ce n'est qu'à 12 qu'elle est ni éteinte ni allumée !`)
+  } else {
+    
+    const led = new arduino.five.Led(13);
+    argv.state == 'on' ? led.on() : led.off();
   }
-      console.log(exports.builder)
 };
