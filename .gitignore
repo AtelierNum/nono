@@ -1,3 +1,6 @@
+#reference install handled through yarn
+package-lock.json
+
 # Logs
 logs
 *.log
