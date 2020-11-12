@@ -4,7 +4,6 @@ exports.describe =
   "make me reapeat something. Sometimes you just need a friend.";
 
 exports.handler = (argv) => {
-  console.log(argv);
   if (Math.random() <= 0.005) {
     argv.msg.channel.send("No.");
   } else {
