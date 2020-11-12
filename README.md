@@ -63,15 +63,15 @@ Pour des usages un peu plus avancés vous pouvez écrire une definition complèt
 
 - `type` : le type du paramètre au choix parmis les possibilités suivantes:
 
-- - `"array"` : le paramètre metteras dans un tableau toutes les valeurs entre lui et le prochain paramètre. Par example `commande --param 1 deux 3` présentera dans le handler `argv.param` comme `[1, 'deux', 3]`.
+  - `"array"` : le paramètre metteras dans un tableau toutes les valeurs entre lui et le prochain paramètre. Par example `commande --param 1 deux 3` présentera dans le handler `argv.param` comme `[1, 'deux', 3]`.
 
-- - `"boolean"` : si ce paramètre ou son alias est present alors `argv.parametre` sera `true` sinon il sera `false`.
+  - `"boolean"` : si ce paramètre ou son alias est present alors `argv.parametre` sera `true` sinon il sera `false`.
 
-- - `"count"` : se comporte comme `"boolean"` sauf qu'il renvoi le nombre de fois que le parammètre à été fourni au lieu de `true`, et donc `0` au lieu de `false`.
+  - `"count"` : se comporte comme `"boolean"` sauf qu'il renvoi le nombre de fois que le parammètre à été fourni au lieu de `true`, et donc `0` au lieu de `false`.
 
-- - `"number"` : permet de récupérer un nombre en paramètre. Par exemple `commande --param 1234` présentera dans le handler `argv.param` comme valant `1234` . Si vous fournissez autre chose qu'un nombre le paramètre aura la valeur `NaN`.
+  - `"number"` : permet de récupérer un nombre en paramètre. Par exemple `commande --param 1234` présentera dans le handler `argv.param` comme valant `1234` . Si vous fournissez autre chose qu'un nombre le paramètre aura la valeur `NaN`.
 
-- - `"string"` : permet de récupérer une chaîne de caractères en paramètre. Attention, les chaîne contenant des espaces doivent être encadré par des `"` lors de l'appel de la commande, sinon seulement le premier mot est pris en compte. Par example `commande --ma_phrase "ceci est correct"` vera `argv.ma_phrase` porter la  valeur `ceci est correct` alors que `commande --ma_phrase ceci n'est pas correct` vera `argv.ma_phrase` porter la valeur `ceci` .
+  - `"string"` : permet de récupérer une chaîne de caractères en paramètre. Attention, les chaîne contenant des espaces doivent être encadré par des `"` lors de l'appel de la commande, sinon seulement le premier mot est pris en compte. Par example `commande --ma_phrase "ceci est correct"` vera `argv.ma_phrase` porter la  valeur `ceci est correct` alors que `commande --ma_phrase ceci n'est pas correct` vera `argv.ma_phrase` porter la valeur `ceci` .
 
 ### Example complet :
 
