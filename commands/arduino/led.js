@@ -1,3 +1,5 @@
+const arduino = require("../../arduino");
+
 exports.command = "<state>";
 
 exports.describe = "change the LED state";
@@ -9,5 +11,9 @@ exports.builder = {
 };
 
 exports.handler = function (argv) {
-  console.log("joour");
+	if(argv.state === "on"){
+		arduino.led(true);
+	}else{
+		arduino.led(false);
+	}
 };

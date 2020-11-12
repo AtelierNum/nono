@@ -5,12 +5,10 @@ const yargs = require("yargs");
 const fs = require("fs");
 const { join } = require("path");
 
-if (process.env.HAS_ARDUINO.toLowerCase() === "true") {
-  const arduino = require("./arduino")();
-  // //top level await ain't a thing yet
-  // //even if it were it would be only at the top of a module
-  while (!arduino) {}
-}
+//TODO right now, the system will try to use the arduino whethere it is ready or not, so this needs improvement
+// if (process.env.HAS_ARDUINO.toLowerCase() === "true") {
+//   const arduino = require("./arduino");
+// }
 
 yargs.scriptName("");
 
