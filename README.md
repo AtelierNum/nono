@@ -6,7 +6,7 @@ Si vous souhaitez participer au développement de Nono, il faut d'abord le repro
 3. Reproduire le ``.env`` avec votre token de bot que vous aurez crée.
 4. Lancer l'app avec ``node mains.js``.
 
-Si vous voulez contribuer mais ne savez pas par ou commencer vous pouvez regarder si il y a des issues portant le tag "good first issue". Il est tout à fait possible que le titre ou la description de la tâche ne soit pas claire, n'hésitez surtout pas à commenter vos questions dessus, c'est déjà du travail en soi et on vous en remerciera :D.
+Si vous voulez contribuer mais ne savez pas par où commencer vous pouvez regarder si il y a des issues portant le tag "good first issue". Il est tout à fait possible que le titre ou la description de la tâche ne soit pas claire, n'hésitez surtout pas à commenter vos questions dessus, c'est déjà du travail en soi et on vous en remerciera :D.
 
 ## Créer un bot Discord
 Il faut déclarer une application sur Discord pour pouvoir mettre en place un bot sur n'importe quel serveur. Cette application permettra de gérer les droits que vous lui donnerez et est identifiable avec le ``client_id`` ; le bot pourra être partagé à n'importe quel utilisateur Discord à partir de son token.
