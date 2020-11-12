@@ -1,4 +1,4 @@
-exports.command = "<help>";
+exports.command = "<ub2r> [reste..]";
 
 exports.describe =
   "Uberize b2renger for real.";
@@ -58,8 +58,8 @@ exports.handler = (argv) => {
   if (!b2renger.status) {
     argv.msg.channel.send("B2renger est momentanément indisponible. Veuillez poursuivre vos incessants appels jusqu'à acceptation de votre requête.");
   } else {
-    // console.log("help :", argv, "\n ------------ \n", argv.msg.content, argv._, argv.msg.content.replace(argv._[0] + ' ', ''))
-    switch (argv.msg.content.replace(argv._[0] + ' ', '')){
+    console.log(argv.ub2r + ' ' + argv.reste.join(' '))
+    switch (argv.ub2r + ' ' + argv.reste.join(' ')){
       case 'on en a gros !' :
         let first_msg = setEmbed(
           {
@@ -74,7 +74,7 @@ exports.handler = (argv) => {
 
         if (argv.i > 1){
           let idInterval = spam(argv);
-          stopSpam(idInterval, argv.i)
+          stopSpam(idInterval, argv.i - 1)
         }
         break;
       default: 
