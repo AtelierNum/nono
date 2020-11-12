@@ -5,6 +5,8 @@ const yargs = require("yargs");
 const fs = require("fs");
 const { join } = require("path");
 
+const prefix = "!";
+
 if (process.env.HAS_ARDUINO.toLowerCase() === "true") {
   const arduino = require("./arduino")();
   // //top level await ain't a thing yet
@@ -46,13 +48,16 @@ mountCmdFolder("./commands");
 //</Kernighan's_Law>
 
 client.on("ready", () => {
+  console.log('Nono est dans la place !');
   client.on("message", (msg) => {
     if (
       msg.author == client.user ||
       msg.channel.name != process.env.INPUT_CHANNEL
-    ) {
+      ) {
       return;
     }
+
+    if(!msg.content.startsWith(prefix)) return;
 
     yargs.parse(msg.content, { msg: msg }, (err, argv, output) => {
       if (output) msg.channel.send("```" + output + "```");
