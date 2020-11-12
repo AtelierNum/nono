@@ -13,7 +13,7 @@ Vous créez donc une nouvelle application [ici](https://discord.com/developers/a
 Une fois cela fait, vous pouvez vous rendre dans l'onglet ``Bot`` où vous pourrez ajouter un nouveau bot et lui donner un petit nom ainsi qu'un magnifique avatar.
 Vous pouvez maintenant récupérer le token du bot, le copier dans le ``.env`` et run l'app pour activer votre bot.
 
-Il ne reste plus qu'à l'ajouter à votre serveur avec le lien suivant (en remplaçant le clioent_id): 
+Il ne reste plus qu'à l'ajouter à votre serveur avec le lien suivant (en remplaçant le client_id): 
 ``https://discord.com/oauth2/authorize?client_id=[le_client_id_de_votre_application_discord]&scope=bot``
 
 
