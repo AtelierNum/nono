@@ -1,3 +1,5 @@
+const embed = require('../helpers/embed')
+
 exports.command = "<ub2r> [reste..]";
 
 exports.describe =
@@ -18,39 +20,14 @@ const b2renger = {
 
 const wait = 10000;
 
-const spam = (argv) => {
+const spam = (argv, msg) => {
   return setInterval(() => {
-    let msg = setEmbed(
-      {
-        author : argv.msg.member.nickname,
-        desc : "B2renger ? B2renger ? B2renger ? J'ai besoin d'aide.                  ",
-        title: "Help request",
-        avatar : argv.msg.author.displayAvatarURL,
-        picture: 'https://ateliernum.github.io/img/logo_ateliernum.png'
-      }
-    )
     return argv.msg.channel.send({embed : msg});
   }, wait)
 }
 
 const stopSpam = (id, i) => {
   setTimeout(() => clearInterval(id), (i * wait) + 100 )
-}
-
-const setEmbed = ({title, desc, author, avatar, picture, url}) => {
-  return msgEmbed = {
-    color: 0xd22140,
-    title: title,
-    author: {
-      name: author,
-      icon_url: avatar,
-    },
-    description: desc,
-    thumbnail: {
-      url: picture,
-    },
-    timestamp: new Date(),
-}
 }
 
 exports.handler = (argv) => {
@@ -61,8 +38,7 @@ exports.handler = (argv) => {
     console.log(argv.ub2r + ' ' + argv.reste.join(' '))
     switch (argv.ub2r + ' ' + argv.reste.join(' ')){
       case 'on en a gros !' :
-        let first_msg = setEmbed(
-          {
+        let embedMsg = embed.setEmbed({
             author : argv.msg.member.nickname,
             desc : "B2renger ? B2renger ? B2renger ? J'ai besoin d'aide.                  ",
             title: "Help request",
@@ -70,10 +46,10 @@ exports.handler = (argv) => {
             picture: 'https://ateliernum.github.io/img/logo_ateliernum.png'
           }
         )
-        argv.msg.channel.send({embed : first_msg});
+        argv.msg.channel.send({embed : embedMsg});
 
         if (argv.i > 1){
-          let idInterval = spam(argv);
+          let idInterval = spam(argv, embedMsg);
           stopSpam(idInterval, argv.i - 1)
         }
         break;
