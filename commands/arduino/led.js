@@ -13,7 +13,9 @@ exports.builder = {
 exports.handler = function (argv) {
 	if(argv.state === "on"){
 		arduino.led(true);
+		argv.msg.channel.send("Turning led on, master");
 	}else{
 		arduino.led(false);
+		argv.msg.channel.send("Turning led off, master");
 	}
 };
