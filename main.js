@@ -30,8 +30,11 @@ const mountCmdFolder = (path) => {
       if (isJSFile(f)) {
         const cmdPath = fsPathToCmdPath(path);
 
-        let newCMD = require(fRelPath);
-        newCMD.command = filenameOf(f) + " " + newCMD.command;
+				let newCMD = require(fRelPath);
+				
+				newCMD.command = (newCMD.command && newCMD.command.trim() !== "") ? 
+					filenameOf(f) + " " + newCMD.command 
+					: filenameOf(f);
         if (cmdPath.trim() !== "")
           newCMD.command = cmdPath + " " + newCMD.command;
         yargs.command(newCMD);
