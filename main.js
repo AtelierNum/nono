@@ -15,16 +15,15 @@ yargs.scriptName("").help().wrap(60);
 //TODO this needs simplification, but it works
 //yeah, I know it's the receipe for it to stay like this forever
 //<Kernighan's_Law>
-const isJSFile = (str) => str.match(/.+\.js$/gi);
-const isDirectory = (str) => !str.match(/.*\..*/gi);
-const relativeJoin = (paths) => "./" + join(...paths); //path.join() doesn't keep "./" prefix but we need it
-const filenameOf = (str) =>
-	str.match(/^.+\./gi).shift().split("").slice(0, -1).join("");
+const isJSFile = str => str.match(/.+\.js$/gi);
+const isDirectory = str => !str.match(/.*\..*/gi);
+const relativeJoin = paths => "./" + join(...paths); //path.join() doesn't keep "./" prefix but we need it
+const filenameOf = str => str.match(/^.+\./gi).shift().split("").slice(0, -1).join("");
 
 const buildCommands = async (path, node) => {
 	const files = await fs.readdir(path);
 
-	files.forEach((file) => {
+	files.forEach(file => {
 		const fRelPath = relativeJoin([path, file]);
 		if (isJSFile(file)) {
 			let newCMD = require(fRelPath);
@@ -51,7 +50,7 @@ const buildCommands = async (path, node) => {
 };
 
 const appendCmdNode = (commands, yargs) => {
-	commands.forEach((cmd) => {
+	commands.forEach(cmd => {
 		switch (cmd.type) {
 			case "cmd":
 				yargs.command(cmd);
@@ -60,7 +59,7 @@ const appendCmdNode = (commands, yargs) => {
 				yargs.command({
 					command: cmd.name + " <subcommand>",
 					desc: "commands relative to " + cmd.name,
-					builder: (yargs) => {
+					builder: yargs => {
 						appendCmdNode(cmd.commands, yargs);
 						return yargs;
 					},
@@ -83,14 +82,11 @@ buildCommands("./commands", commandTree).then(() => {
 //</Kernighan's_Law>
 
 client.on("ready", () => {
-  client.user.setActivity("https://github.com/AtelierNum/nono", {
-    type: "WATCHING",
-  });
-	client.on("message", (msg) => {
-		if (
-			msg.author == client.user ||
-			msg.channel.name != process.env.INPUT_CHANNEL
-		) {
+	client.user.setActivity("https://github.com/AtelierNum/nono", {
+		type: "WATCHING",
+	});
+	client.on("message", msg => {
+		if (msg.author == client.user || msg.channel.name != process.env.INPUT_CHANNEL) {
 			return;
 		}
 

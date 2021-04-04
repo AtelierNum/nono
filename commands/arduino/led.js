@@ -5,15 +5,15 @@ exports.command = "<state>";
 exports.describe = "change the LED state";
 
 exports.builder = {
-  state: {
-    default: false,
-  },
+	state: {
+		default: false,
+	},
 };
 
 exports.handler = function (argv) {
-	if(argv.state === "on"){
+	if (argv.state === "on") {
 		arduino.led(true);
-	}else{
+	} else {
 		arduino.led(false);
 	}
 };
