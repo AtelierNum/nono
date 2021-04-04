@@ -83,6 +83,9 @@ buildCommands("./commands", commandTree).then(() => {
 //</Kernighan's_Law>
 
 client.on("ready", () => {
+  client.user.setActivity("https://github.com/AtelierNum/nono", {
+    type: "WATCHING",
+  });
 	client.on("message", (msg) => {
 		if (
 			msg.author == client.user ||
