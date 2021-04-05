@@ -1,3 +1,4 @@
+const pm2 = require("pm2");
 const git = require("isomorphic-git");
 const http = require("isomorphic-git/http/node");
 const fs = require("fs");
@@ -17,7 +18,9 @@ exports.handler = async argv => {
 				name: "nono",
 			},
 		});
-		argv.msg.channel.send("update complete");
+		argv.msg.channel.send("pull complete, restarting...");
+		await pm2.connect();
+		pm2.restart("nono");
 	} catch (err) {
 		argv.msg.channel.send("```" + err.toString() + "```");
 	}
