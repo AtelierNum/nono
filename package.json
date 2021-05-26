@@ -9,7 +9,8 @@
 		"start": "pm2 start main.js --name nono",
 		"dev": "pm2 start main.js --name nono --watch && pm2 logs",
 		"stop": "pm2 stop nono",
-		"restart": "pm2 restart nono"
+		"restart": "pm2 restart nono",
+		"logs": "pm2 logs"
 	},
 	"keywords": [
 		"arduino",
