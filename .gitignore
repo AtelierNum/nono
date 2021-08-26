@@ -1,3 +1,6 @@
+data/admins.json
+data/leaderboard.json
+
 #reference install handled through yarn
 package-lock.json
 

@@ -4,6 +4,7 @@ const client = new Discord.Client();
 const yargs = require("yargs");
 const fs = require("fs").promises;
 const { join } = require("path");
+const nono = require("./nono");
 
 //TODO right now, the system will try to use the arduino whethere it is ready or not, so this needs improvement
 // if (process.env.HAS_ARDUINO.toLowerCase() === "true") {
@@ -91,6 +92,7 @@ client.on("ready", () => {
 		}
 
 		yargs.parse(msg.content, { msg: msg }, (err, argv, output) => {
+			nono.execPassiveListeners(argv);
 			if (output) msg.channel.send("```" + output + "```");
 		});
 	});
