@@ -1,0 +1,16 @@
+{
+	"types": ["number", "string", "choice"],
+	"questions": [
+		{
+			"type": "choice",
+			"question": "If my line is 120 volts and my lighbulb as a resistance of 144 ohms, how many amps go through?",
+			"choices": ["0.83", "8.1", "1.73"],
+			"answer": "1"
+		},
+		{
+			"type": "string",
+			"question": "How does your mum smell?",
+			"answer": "bad"
+		}
+	]
+}
