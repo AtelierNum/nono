@@ -99,12 +99,13 @@ module.exports = {
         currentQuestion = getRandomQuestion(questions);
 	    askQuestion(currentQuestion, channel);
         timeout = setTimeout(() => handleTimeout(nono,quizzPassiveListener ,msg.channel),timeBeforeQuit)
-        quizzPassiveListener = nono.registerPassiveListener(routine);
+        passiveListener = nono.registerPassiveListener(routine);
     },
 
     stop : () => {
+        console.dir(passiveListener);
         if (passiveListener) {
-            nono.freePassiveListener(quizzPassiveListener);
+            nono.freePassiveListener(passiveListener);
         }
     },
 
