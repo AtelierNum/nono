@@ -25,9 +25,7 @@ module.exports = {
 	},
 
 	freePassiveListener: id => {
-		console.dir(`avant ${passiveListeners}`);
 		delete passiveListeners[id];
-		console.dir(`apres ${passiveListeners}`);
 	},
 
 	execPassiveListeners: params => {
