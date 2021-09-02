@@ -1,4 +1,4 @@
-const arduino = require("../../arduino");
+// const arduino = require("../../arduino");
 
 exports.command = "<state>";
 
@@ -11,9 +11,10 @@ exports.builder = {
 };
 
 exports.handler = function (argv) {
-	if (argv.state === "on") {
-		arduino.led(true);
-	} else {
-		arduino.led(false);
-	}
+	argv.msg.channel.send("For now the arduino is not in service.");
+	// if (argv.state === "on") {
+	// 	arduino.led(true);
+	// } else {
+	// 	arduino.led(false);
+	// }
 };
