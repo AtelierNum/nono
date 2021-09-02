@@ -7,16 +7,16 @@ exports.builder = yargs => {
 		ft: {
 			alias: "first-to",
 			describe: "the number of good answers needed to win.",
-			type:"number",
+			type: "number",
 			default: 5,
 		},
 	});
 };
 
-exports.handler = ({msg, ft}) => {
-    if(quizz.passiveListener){
-        msg.channel.send("There is already a quizz playing.");
-    }
+exports.handler = ({ msg, ft }) => {
+	if (quizz.passiveListener) {
+		msg.channel.send("There is already a quizz playing.");
+	}
 
-    quizz.start(msg.channel, ft);
-}
+	quizz.start(msg.channel, ft);
+};
