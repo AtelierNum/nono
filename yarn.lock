@@ -1159,10 +1159,10 @@ isomorphic-git@^1.8.1:
     sha.js "^2.4.9"
     simple-get "^3.0.2"
 
-johnny-five@^1.0.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/johnny-five/-/johnny-five-1.5.0.tgz#9b0ed22bdd2c32be3a9c2d7abf844756ce30fa1d"
-  integrity sha512-5Br2oLSsItB5dfslE2TXTc5cZ61wAX46kD2yJO1pu57nVRnCIdJZxV4EAiY5VEzH6MVW2vL57NSnZqNxMMMfLg==
+johnny-five@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/johnny-five/-/johnny-five-2.1.0.tgz#12b70d41f716e9fc275308e9e960c4ba2b66e005"
+  integrity sha512-0Z6qa9Tlt7vUShW8gzewXTJgckhMfbaM7ZhbApOhkAW0PrLIOQms/DjOptE/oitE70tD3O8YJ7OlNSMe+en2DQ==
   dependencies:
     chalk "2.1.0"
     color-convert "~1.2.2"
