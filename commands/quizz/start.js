@@ -14,9 +14,19 @@ exports.builder = yargs => {
 };
 
 exports.handler = ({ msg, ft }) => {
-	if (quizz.passiveListener) {
+	if (quizz.isActive()) {
 		msg.channel.send("There is already a quizz playing.");
+		return;
+	}
+	if (!quizz.isOpen()) {
+		msg.channel.send("There is no lobby to start from. Try `quizz init`");
+		return;
 	}
 
-	quizz.start(msg.channel, ft);
+	quizz
+		.start(msg.channel, ft, msg.author)
+		.then(() => {})
+		.catch(e => {
+			msg.channel.send(e);
+		});
 };

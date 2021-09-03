@@ -8,8 +8,11 @@ const leaderboardFilePath = path.resolve(__dirname, "..", "..", "data", "quizz_l
 
 let passiveListener = null;
 let participants = {};
+let tries = {};
 let questions = null;
 let currentQuestion = {};
+let isOpen = false;
+let gameAdmin = "";
 
 let timeout = null;
 const timeBeforeQuit = 300000; // 300000 => 5min
@@ -61,17 +64,25 @@ const routine = ctx => {
 	);
 	const message = ctx.msg;
 
+	if (tries[message.author]) {
+		return;
+	}
+
 	if (!evalAnswer(message.content, currentQuestion)) {
 		message.react("❌");
+		tries[message.author] = true;
+		console.log(Object.keys(tries).length, Object.keys(tries).length);
+		if (Object.keys(tries).length >= Object.keys(participants).length) {
+			message.channel.send("Y'all are wrong, next one:");
+			currentQuestion = getRandomQuestion(questions);
+			askQuestion(currentQuestion, message.channel);
+			tries = {};
+		}
 	} else {
 		message.react("✅");
 		const authorName = message.author.username;
 
-		if (!participants[authorName]) {
-			participants[authorName] = 1;
-		} else {
-			participants[authorName] += 1;
-		}
+		participants[authorName] += 1;
 
 		if (participants[authorName] >= ft) {
 			//https://knowyourmeme.com/memes/a-winner-is-you
@@ -96,7 +107,15 @@ const routine = ctx => {
 };
 
 module.exports = {
-	start: async (channel, firstTo) => {
+	start: async (channel, firstTo, author) => {
+		if (Object.keys(participants).length < 2) {
+			throw "not enough players";
+		}
+
+		if (author.id != gameAdmin.id) {
+			throw "only the admin of the lobby can start";
+		}
+
 		ft = firstTo;
 
 		if (questions == null) {
@@ -106,15 +125,13 @@ module.exports = {
 
 		currentQuestion = getRandomQuestion(questions);
 		askQuestion(currentQuestion, channel);
-		timeout = setTimeout(
-			() => handleTimeout(nono, quizzPassiveListener, msg.channel),
-			timeBeforeQuit
-		);
+		clearTimeout(timeout);
+		timeout = setTimeout(() => handleTimeout(nono, passiveListener, msg.channel), timeBeforeQuit);
 		passiveListener = nono.registerPassiveListener(routine);
+		isOpen = false;
 	},
 
 	stop: () => {
-		console.dir(passiveListener);
 		if (passiveListener) {
 			nono.freePassiveListener(passiveListener);
 		}
@@ -128,5 +145,48 @@ module.exports = {
 		//In case you really need to know, yes, I am compensating --Zhakk'Harn
 		//prettier-ignore
 		return Object.entries(JSON.parse(await fs.readFile(leaderboardFilePath,"utf-8")).leaderboard).sort((a,b) => b[1] - a[1]).map(e => e.join(" : ")).join("\n");
+	},
+
+	addPlayer: username => {
+		if (typeof participants[username] !== "undefined") {
+			return false;
+		}
+
+		participants[username] = 0;
+		return true;
+	},
+
+	removePlayer: username => {
+		if (participants[username]) {
+			delete participants[username];
+
+			if (Object.keys(participants).length < 2) {
+				this.stop();
+			}
+
+			return true;
+		}
+		return false;
+	},
+
+	isActive: () => {
+		return Boolean(passiveListener);
+	},
+
+	open: gAdmin => {
+		isOpen = true;
+		gameAdmin = gAdmin;
+		timeout = setTimeout(() => {
+			isOpen = false;
+			participants = {};
+		}, timeBeforeQuit);
+	},
+
+	isOpen: () => {
+		return isOpen;
+	},
+
+	getGameAdmin: () => {
+		return gameAdmin;
 	},
 };
