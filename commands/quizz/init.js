@@ -3,6 +3,10 @@ const quizz = require("./quizz.cjs");
 exports.describe = "create a quizz lobby";
 
 exports.handler = ({ msg }) => {
+	if (quizz.isActive()) {
+		return;
+	}
+
 	if (!quizz.isOpen()) {
 		quizz.open(msg.author);
 		msg.channel.send(

@@ -1,42 +1,29 @@
 const fs = require("fs").promises;
 const path = require("path");
-const nono = require("../../nono");
 const levenshteinEditDistance = require("fast-levenshtein");
 
 const questionFilePath = path.resolve(__dirname, "..", "..", "data", "quizz_questions.json");
 const leaderboardFilePath = path.resolve(__dirname, "..", "..", "data", "quizz_leaderboard.json");
 
-let passiveListener = null;
+const minPlayerCount = 2;
+
 let participants = {};
 let tries = {};
 let questions = null;
 let currentQuestion = {};
+let isActive = false;
 let isOpen = false;
 let gameAdmin = "";
+let onQuestionChangeCb = () => {};
+let onDoneCb = () => {};
 
-let timeout = null;
-const timeBeforeQuit = 300000; // 300000 => 5min
 let ft;
 
-const getRandomQuestion = questions => {
+const changeQuestion = () => {
 	const randIndex = Math.floor(Math.random() * questions.length);
-	return questions[randIndex];
-};
-
-const askQuestion = (question, channel) => {
-	channel.send(question.question);
-	if (question.type === "choice") {
-		let choices = ``;
-		question.choices.forEach((c, i) => {
-			choices += `${i + 1}:	${c} \n`;
-		});
-		channel.send(choices);
-	}
-};
-
-const handleTimeout = (nono, quizzPassiveListener, channel) => {
-	nono.freePassiveListener(quizzPassiveListener);
-	channel.send("alright, looks like everyone left, the quizz is canceled.");
+	currentQuestion = questions[randIndex];
+	tries = {};
+	onQuestionChangeCb(currentQuestion);
 };
 
 const evalAnswer = (answer, question) => {
@@ -56,60 +43,10 @@ const evalAnswer = (answer, question) => {
 	}
 };
 
-const routine = ctx => {
-	clearTimeout(timeout);
-	timeout = setTimeout(
-		() => handleTimeout(nono, quizzPassiveListener, ctx.msg.channel),
-		timeBeforeQuit
-	);
-	const message = ctx.msg;
-
-	if (tries[message.author]) {
-		return;
-	}
-
-	if (!evalAnswer(message.content, currentQuestion)) {
-		message.react("❌");
-		tries[message.author] = true;
-		console.log(Object.keys(tries).length, Object.keys(tries).length);
-		if (Object.keys(tries).length >= Object.keys(participants).length) {
-			message.channel.send("Y'all are wrong, next one:");
-			currentQuestion = getRandomQuestion(questions);
-			askQuestion(currentQuestion, message.channel);
-			tries = {};
-		}
-	} else {
-		message.react("✅");
-		const authorName = message.author.username;
-
-		participants[authorName] += 1;
-
-		if (participants[authorName] >= ft) {
-			//https://knowyourmeme.com/memes/a-winner-is-you
-			ctx.msg.channel.send("a winner is " + authorName + "!");
-
-			fs.readFile(leaderboardFilePath, "utf-8").then(leaderboardStr => {
-				let leaderboard = JSON.parse(leaderboardStr).leaderboard;
-				if (!leaderboard[authorName]) {
-					leaderboard[authorName] = ft;
-				} else {
-					leaderboard[authorName] += ft;
-				}
-				fs.writeFile(leaderboardFilePath, JSON.stringify({ leaderboard }));
-			});
-
-			nono.freePassiveListener(quizzPassiveListener);
-		} else {
-			currentQuestion = getRandomQuestion(questions);
-			askQuestion(currentQuestion, message.channel);
-		}
-	}
-};
-
 module.exports = {
-	start: async (channel, firstTo, author) => {
-		if (Object.keys(participants).length < 2) {
-			throw "not enough players";
+	start: async (firstTo, author) => {
+		if (Object.keys(participants).length < minPlayerCount) {
+			throw "not enough players, we need atleast " + minPlayerCount;
 		}
 
 		if (author.id != gameAdmin.id) {
@@ -123,18 +60,13 @@ module.exports = {
 			questions = JSON.parse(questionFile).questions;
 		}
 
-		currentQuestion = getRandomQuestion(questions);
-		askQuestion(currentQuestion, channel);
-		clearTimeout(timeout);
-		timeout = setTimeout(() => handleTimeout(nono, passiveListener, msg.channel), timeBeforeQuit);
-		passiveListener = nono.registerPassiveListener(routine);
+		changeQuestion();
 		isOpen = false;
+		isActive = true;
 	},
 
 	stop: () => {
-		if (passiveListener) {
-			nono.freePassiveListener(passiveListener);
-		}
+		isActive = false;
 	},
 
 	getScore: () => {
@@ -170,16 +102,12 @@ module.exports = {
 	},
 
 	isActive: () => {
-		return Boolean(passiveListener);
+		return isActive;
 	},
 
 	open: gAdmin => {
 		isOpen = true;
 		gameAdmin = gAdmin;
-		timeout = setTimeout(() => {
-			isOpen = false;
-			participants = {};
-		}, timeBeforeQuit);
 	},
 
 	isOpen: () => {
@@ -188,5 +116,42 @@ module.exports = {
 
 	getGameAdmin: () => {
 		return gameAdmin;
+	},
+
+	onQuestionChange: callback => {
+		onQuestionChangeCb = callback;
+	},
+
+	evalAnswer: (answer, authorName) => {
+		const isCorrect = evalAnswer(answer, currentQuestion);
+		if (!isCorrect) {
+			tries[authorName] = true;
+			if (Object.keys(tries).length >= Object.keys(participants).length) {
+				changeQuestion();
+			}
+		} else {
+			participants[authorName] += 1;
+
+			if (participants[authorName] >= ft) {
+				onDoneCb(authorName);
+
+				fs.readFile(leaderboardFilePath, "utf-8").then(leaderboardStr => {
+					let leaderboard = JSON.parse(leaderboardStr).leaderboard;
+					if (!leaderboard[authorName]) {
+						leaderboard[authorName] = ft;
+					} else {
+						leaderboard[authorName] += ft;
+					}
+					fs.writeFile(leaderboardFilePath, JSON.stringify({ leaderboard }));
+				});
+			} else {
+				changeQuestion();
+			}
+		}
+		return isCorrect;
+	},
+
+	onDone: callback => {
+		onDoneCb = callback;
 	},
 };
